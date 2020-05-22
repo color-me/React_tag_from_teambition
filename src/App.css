@@ -1,38 +1,98 @@
-.App {
+@import "~antd/dist/antd.css";
+.Container {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.tag-ul{
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.tag-wrap{
+  margin: 8px 0 0 8px;
+  height: 28px;
+  position: relative;
+}
+
+.tag{
+  overflow: hidden;
+  margin: 8px 0 0 8px;
+  height: 28px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  border-radius: 28px;
+  padding: 0 12px;
+  transition: padding-right 218ms ease;
+  z-index: 1;
+}
+
+.tag:hover{
+  padding-right: 25px;
+  z-index: auto;
+}
+
+.tag-red{
+  color: #c21c07;
+  background-color: #ffeded;
+}
+
+.close {
+  top: 16px;
+  right: 30px;
+  position: absolute;
+  font-size: 16px;
+  z-index: 0;
+}
+
+
+
+.close:before, .close:after {
+  position: absolute;
+  left: 15px;
+  content: ' ';
+  height: 14px;
+  width: 2.5px;
+  background-color: #333;
+}
+.close:before {
+  transform: rotate(45deg);
+}
+.close:after {
+  transform: rotate(-45deg);
+}
+
+ul{
+  list-style:none;
+  padding-left:0;
+}
+
+li{
+  display:inline;
+}
+
+.tag-tb{
+  display:flex;
+  text-indent:10px;
+  padding: 0 !important; 
+  line-height: 40px;
+  cursor: pointer;
+}
+
+.tag-tb:hover{
+  background-color: rgb(228, 228, 228);
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  margin: auto;
+  width: 30%;
+  /* background-color: rgb(218, 218, 218); */
+  height: 50px;
+  /* color: white; */
 }
