@@ -25,25 +25,28 @@
   border-radius: 28px;
   padding: 0 12px;
   transition: padding-right 218ms ease;
-  z-index: 1;
+  z-index: 2;
 }
 
 .tag:hover{
   padding-right: 25px;
-  z-index: auto;
+  z-index: 0;
 }
 
 .tag-red{
   color: #c21c07;
   background-color: #ffeded;
+  z-index: 0;
 }
 
 .close {
-  top: 16px;
+  top: 9px;
   right: 30px;
   position: absolute;
   font-size: 16px;
-  z-index: 0;
+  opacity: 0;
+  transition: opacity 218ms ease;
+
 }
 
 
@@ -53,8 +56,8 @@
   left: 15px;
   content: ' ';
   height: 14px;
-  width: 2.5px;
-  background-color: #333;
+  width: 3px;
+  background-color: #666;
 }
 .close:before {
   transform: rotate(45deg);
