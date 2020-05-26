@@ -2,20 +2,17 @@
 .Container {
   text-align: center;
 }
-
-.tag-ul{
+.tag-ul {
   display: flex;
   align-items: center;
   justify-content: center;
 }
-
-.tag-wrap{
+.tag-wrap {
   margin: 8px 0 0 8px;
   height: 28px;
   position: relative;
 }
-
-.tag{
+.tag {
   overflow: hidden;
   margin: 8px 0 0 8px;
   height: 28px;
@@ -27,18 +24,18 @@
   transition: padding-right 218ms ease;
   z-index: 2;
 }
-
-.tag:hover{
+.tag:hover {
   padding-right: 25px;
   z-index: 0;
 }
-
-.tag-red{
+.tag:hover .close {
+  opacity: 1;
+}
+.tag-red {
   color: #c21c07;
   background-color: #ffeded;
   z-index: 0;
 }
-
 .close {
   top: 9px;
   right: 30px;
@@ -46,12 +43,9 @@
   font-size: 16px;
   opacity: 0;
   transition: opacity 218ms ease;
-
 }
-
-
-
-.close:before, .close:after {
+.close:before,
+.close:after {
   position: absolute;
   left: 15px;
   content: ' ';
@@ -65,33 +59,27 @@
 .close:after {
   transform: rotate(-45deg);
 }
-
-ul{
-  list-style:none;
-  padding-left:0;
+ul {
+  list-style: none;
+  padding-left: 0;
 }
-
-li{
-  display:inline;
+li {
+  display: inline;
 }
-
-.tag-tb{
-  display:flex;
-  text-indent:10px;
-  padding: 0 !important; 
+.tag-tb {
+  display: flex;
+  text-indent: 10px;
+  padding: 0 !important;
   line-height: 40px;
   cursor: pointer;
 }
-
-.tag-tb:hover{
-  background-color: rgb(228, 228, 228);
+.tag-tb:hover {
+  background-color: #e4e4e4;
 }
-
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
   height: 80px;
 }
-
 .App-header {
   margin: auto;
   width: 30%;
