@@ -5,6 +5,7 @@
 }
 
 .tag-ul{
+  margin-top:15px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -76,6 +77,14 @@ li{
   display:inline;
 }
 
+.edit{
+  visibility: hidden;
+}
+
+.edit:hover{
+  color: #1890ff;
+}
+
 .tag-tb{
   display:flex;
   text-indent:10px;
@@ -85,7 +94,25 @@ li{
 }
 
 .tag-tb:hover{
-  background-color: rgb(228, 228, 228);
+  background-color: rgb(243, 243, 243);
+  .edit{
+    visibility: visible;
+  }
+}
+
+.plus{
+  margin-left: 10px;
+  margin-top: 10px;
+  border-radius:50%;
+  border-color:#1890ff;
+  padding:0 5px;
+  width:32px;
+}
+
+.plus-span{
+  color: #1890ff;
+  font-size: 22px;
+  line-height: 20px;
 }
 
 .App-logo {
