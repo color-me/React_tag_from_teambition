@@ -89,7 +89,7 @@ class Container extends Component {
   }
 
   handleEdit = e => {
-    console.log("edit (delete and change) 判断按钮 执行两种操作");
+    console.log("edit (delete and change) 判断是编辑完成还是删除按钮 执行两种操作");
   }
 
   handleCreate = e => {
@@ -105,6 +105,8 @@ class Container extends Component {
         />
         <DropDown
           changeDone={this.changeDone}
+          handleEdit={this.handleEdit}
+          handleCreate={this.handleCreate}
           data={this.state.data}
         />
       </div>

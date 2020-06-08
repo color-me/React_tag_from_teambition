@@ -6,31 +6,40 @@ import {
   Button
 } from "antd";
 
-  class TagInput extends Component {
-    constructor(props) {
-      super(props);
-    }
-  
-    render() {
-      return (
-        <div>
-          <Input placeholder="输入标签名" style={{ marginBottom: "15px" }} />
-        </div>
-      );
-    }
-  
-  }
-
   class ColorSelect extends Component {
     constructor(props) {
       super(props);
+      this.state = {
+        selectedColor: ''
+      };
+    }
+
+    choose = e => {
+      e.stopPropagation()
+      let selectedColor = e.target.getAttribute("colornum");
+      this.setState({
+        selectedColor: selectedColor
+      })
     }
   
     render() {
+      const colorItems=[];
+      for(let i=1;i<=6;i++){
+        colorItems.push(
+          <li key={i} colornum={i}
+          id={"color-circle"} 
+          className={"color"+i} 
+          onClick={this.choose}>
+              <span className="gougou" colornum={i}
+              style={{visibility: this.state.selectedColor==i ? "visible" : "hidden"}}>
+                √
+              </span>
+          </li>
+        )
+      };
+    
       return (
-        <div>
-          <Input placeholder="搜索" style={{ marginBottom: "15px" }} />
-        </div>
+           <ul className="tag-ul" style={{display:"flex",justifyContent: "space-between"}}>{colorItems}</ul>
       );
     }
   
@@ -44,7 +53,17 @@ import {
     render() {
       return (
         <div>
-          <Input placeholder="搜索" style={{ marginBottom: "15px" }} />
+          <a onClick={this.props.changeToTable} className="icon">&lt;</a>
+          <Input type="text" placeholder="标签名称"
+            value={this.props.filterText}
+          />
+          <ColorSelect
+          >
+          </ColorSelect>
+          <Button type="primary"
+          style={{width:"100%",marginBottom:"15px"}}
+          // onClick={this.props.changeToCreate}
+          >创建</Button>
         </div>
       );
     }
@@ -59,7 +78,20 @@ import {
     render() {
       return (
         <div>
-          <Input placeholder="搜索" style={{ marginBottom: "15px" }} />
+          <a onClick={this.props.changeToTable} className="icon">&lt;</a>
+          <Input type="text" placeholder="标签名称"
+            value={this.props.filterText}//放入需要编辑的标签的原始值
+          />
+          <ColorSelect
+          >
+          </ColorSelect>
+          <Button danger style={{width:"45%",marginBottom:"15px"}}>
+            删除
+          </Button>
+          <Button type="primary"
+           style={{width:"45%",float:"right"}}
+          // onClick={this.props.changeToCreate}
+          >完成</Button>
         </div>
       );
     }
@@ -133,22 +165,25 @@ import {
         <li className="tag-tb"
             key={item.thing}
             id={item.thing}
-            onClick={this.props.changeDone}   
-          >{item.thing}
+            onClick={this.props.changeDone}
+          >
+            <span className="dot">• &nbsp;</span>
+            {item.thing}
           <div className="edit" style={{ marginLeft: "auto",zIndex:"10" }}
           onClick={this.props.changeToEdit}
           >编辑</div> {/*点击“编辑”时，要用到阻止冒泡（stopPropagation()），以防触发changeDone事件。*/}
           <div style={{ visibility: item.done ? "visible" : "hidden", marginRight: "10px",fontWeight: "800" }}>√</div>
         </li>
       );
-      if (listItems.length<1){// 二选一！！！！！！！！！！
-        // listItems.push(
-        //   <li className="tag-tb"> 没有结果 </li>
-        // )
 
-        this.props.changeToEdit();
-      }
       });
+      if (listItems.length<=0){// 二选一！！！！！！！！！！
+        console.log("没有")
+        listItems.push(
+          <li className="tag-tb" key style={{color:"#a9a9a9"}}> 没有结果 </li>
+        )
+        // this.props.changeToEdit();
+      }
 
       return (
         <ul>{listItems}</ul>
@@ -162,6 +197,7 @@ class DropDown extends Component {
       this.state = {
         filterText: '',
         visible: false,
+        view:1
       };
     }
   
@@ -170,13 +206,26 @@ class DropDown extends Component {
     //     visible: false,
     //   });
     // };
+
+    changeToTable= e => {
+      this.setState({
+        view: 1,
+      });
+    }
+
     changeToEdit = e => {
       e.stopPropagation();//点击编辑，阻止事件冒泡！！！！！！！！
       console.log("666");
+      this.setState({
+        view: 3,
+      });
     }
 
     changeToCreate = e => {
       console.log("222");
+      this.setState({
+        view: 2,
+      });
     }
   
     handleVisibleChange = visible => {
@@ -196,11 +245,11 @@ class DropDown extends Component {
           <Popover
             content={
               <div style={{ width: "250px" }}>
-                {/* <a onClick={this.hide} style={{display:"block",float:"right",marginRight:"7px",marginBottom:"10px"}}>关闭</a> */}
+                {/* <a onClick={this.hide} className="icon" style={{float:"right",marginRight:"7px",marginLeft:"30px"}}>×</a> */}
               
                   {/* 在这里用if else 切换三种视图！！！！！！！！！！！！！！！！！！！！！！！！ */}
 
-                  <div style={{display:"block"}}>
+                  <div style={{display:this.state.view==1?"block":"none"}}>
                     <TagSearch
                     filterText={this.state.filterText}
                     handleFilterTextChange={this.handleFilterTextChange}
@@ -220,42 +269,26 @@ class DropDown extends Component {
                     </TagTable>
                   </div>
   
-                  <div style={{display:"none"}}>
-                    <TagInput
-                                                //标签新增框!!!!!!!!!!!!!!!!!!!!!!!
-                    >
-                    </TagInput>
-  
-                    <ColorSelect
-                    
-                    >
-                    </ColorSelect>
-  
+                  <div style={{display:this.state.view==2?"block":"none"}}>
+                                                {/* //标签新增框!!!!!!!!!!!!!!!!!!!!!!! */}
                     <TagCreate
+                    changeToTable={this.changeToTable}
                     >
   
                     </TagCreate>
                   </div>
   
-                  <div style={{display:"none"}}>
-                    <TagInput
-                                                //标签修改框!!!!!!!!!!!!!!!!!!!!!!!
-                    >
-                    </TagInput>
-  
-                    <ColorSelect
-
-                    >
-                    </ColorSelect>
-  
+                  <div style={{display:this.state.view==3?"block":"none"}}>
+                                                {/* //标签修改框!!!!!!!!!!!!!!!!!!!!!!! */}
                     <TagEdit
+                    changeToTable={this.changeToTable}
                     >
   
                     </TagEdit>
                   </div>
               </div>
             }
-            title="所有标签"
+            title="标签编辑器"
             trigger="click"
             visible={this.state.visible}
             onVisibleChange={this.handleVisibleChange}
