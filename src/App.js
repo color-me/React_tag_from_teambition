@@ -2,11 +2,6 @@
 import React, { Component } from "react";
 import DropDown from "./tools.js"
 import "./App.less";
-import {
-  Input,
-  Popover,
-  Button
-} from "antd";
 
 
 class TagList extends Component {
@@ -59,21 +54,56 @@ class Container extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { ////最高层级的state！！！！！！！！！！！！！！！！！！！！！！！
+    this.state = { ////最高层级的state！！！
       editdata: null,
       data: [
         { done: true, thing: 'sleep' },
-        { done: true, thing: 'play' },
+        { done: false, thing: 'play' },
         { done: true, thing: 'drink' },
-        { done: true, thing: 'Eat' }
-      ]
+        { done: true, thing: 'eat' },
+        { done: true, thing: 'swim' },
+        { done: true, thing: 'run' },
+      ],
+      view:1,
+      itemText:''
     };
   }
 
-  // componentDidMount = () => {
-  //  加载前就执行的函数
+  //标签列表在浏览器本地存储，为了展示效果暂时注释掉
+  // componentDidMount () {//  加载前就执行的函数
+  //   this.setState(() => ({
+  //       data: JSON.parse(localStorage.getItem('data')) || []
+  //   }))
   // }
-  changeDone=(e)=> {//
+  // componentDidUpdate() {
+  //   localStorage.setItem('data', JSON.stringify(this.state.data));
+  // }
+
+  changeToTable= e => {
+    this.setState({
+      view: 1,
+    });
+  }
+
+  changeToEdit = e => {
+    e.stopPropagation();//点击编辑，阻止事件冒泡！！！！！！！！
+    console.log("666");
+    let itemText = e.target.getAttribute("id");
+    this.setState({
+      itemText: itemText,
+      view: 3
+    });
+  }
+
+  changeToCreate = e => {
+    console.log("222");
+    this.setState({
+      view: 2,
+    });
+  }
+
+  changeDone=(e)=> {
+    e.stopPropagation();
     let index = e.target.getAttribute("id");
     console.log("666666")
     this.state.data.map(item => {
@@ -88,12 +118,97 @@ class Container extends Component {
     })
   }
 
-  handleEdit = e => {
-    console.log("edit (delete and change) 判断是编辑完成还是删除按钮 执行两种操作");
+  handleCreate = e => {
+    e.persist();
+    let a={};
+    let flag=true;
+    a.done=true;
+    a.thing=e.target.value;
+    console.log(a.thing);
+    if(a.thing.length==0){
+      flag=!flag;
+    }
+    this.state.data.forEach(item => {
+      if (item.thing === a.thing) {
+        flag=!flag;
+      }
+    })
+    if(flag){
+      this.state.data.push(a);
+      this.setState({
+        data: this.state.data,
+        view:1
+      })
+    }else if(a.thing.length==0){
+      alert("不能为空 ！");
+    }
+    else {
+      alert("标签名称已存在！");
+    }
   }
 
-  handleCreate = e => {
-    console.log("create");
+  handleEdit = e => {
+    // edit (delete and change) 判断是编辑完成还是删除按钮 执行两种操作
+    e.persist();
+    var z=1;
+    var origin=e.target.getAttribute("origin");//谁调用handleEdit函数，谁就通过e.target来获取它自己身上的origin
+    let which=e.target.getAttribute("id");
+    if(which=="change"){
+      let a={};
+      let flag=true;
+      let appearAgain=false;
+      a.done=true;
+      a.thing=e.target.value;
+      console.log(a.thing);
+      if(a.thing.length==0){
+        flag=!flag;
+      }
+      this.state.data.forEach(item => {
+        if (item.thing === a.thing) {
+          item.thing=a.thing;
+        };
+      })
+      this.state.data.forEach(item => {
+        if (item.thing === origin&&a.thing.length!=0) {
+          item.thing=a.thing;
+          
+        };
+        // if (item.thing === a.thing) {
+        //   appearAgain=true;
+        //   flag=false;
+
+        // }
+      })
+      if(flag){
+        this.setState({
+          data: this.state.data,
+          view:1
+        })
+      }else if(a.thing.length==0){
+        alert("不能为空 ！");
+      }
+      else if(appearAgain){
+        alert("标签名称已存在！");
+      } else{
+        this.setState({
+          view:1
+        })
+      }
+    }else if(which=="delete"){
+      var index;
+      console.log(origin);
+      this.state.data.forEach(item => {
+        if (item.thing == origin) {
+          index = this.state.data.indexOf(item); 
+        }
+      })
+      this.state.data.splice(index, 1); 
+      this.setState({
+        data: this.state.data,
+        view:1
+      })
+    }
+
   }
 
   render() {
@@ -107,7 +222,12 @@ class Container extends Component {
           changeDone={this.changeDone}
           handleEdit={this.handleEdit}
           handleCreate={this.handleCreate}
+          changeToTable={this.changeToTable}
+          changeToEdit={this.changeToEdit}
+          changeToCreate={this.changeToCreate}
+          view={this.state.view}
           data={this.state.data}
+          itemText={this.state.itemText}
         />
       </div>
     );

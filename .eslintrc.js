@@ -23,10 +23,10 @@ module.exports = {
     ],
     "rules": {
     },
-    "parser":{
+    "parser":[
      "babel-eslint"
-    },
-    "extends":{
+    ],
+    "extends":[
      "airbnb"
-    }
+    ]
 };

@@ -48,22 +48,47 @@ import {
   class TagCreate extends Component {
     constructor(props) {
       super(props);
+      this.state={
+        editingItemText:''
+        // isDisabled:false
+      };
     }
-  
+
+    changeItem = e =>{
+      e.persist();
+      this.setState({editingItemText: e.target.value},() => {
+          console.log(this.state.editingItemText);   // 2
+        });
+      //setState是异步 的，怎么解决延迟问题？
+    }
+
+    // componentDidUpdate = () => {
+    //   if (this.state.editingItemText==''){
+    //     this.setState({isDisabled:false});
+    //   }else{
+    //     console.log("1314");
+    //   }
+    // }
+
     render() {
       return (
         <div>
           <a onClick={this.props.changeToTable} className="icon">&lt;</a>
           <Input type="text" placeholder="标签名称"
-            value={this.props.filterText}
+            value={this.state.editingItemText}//放入需要编辑的标签的原始值
+            onChange={this.changeItem}
           />
           <ColorSelect
           >
           </ColorSelect>
-          <Button type="primary"
+          <button type="primary"
+          className="btn"
           style={{width:"100%",marginBottom:"15px"}}
-          // onClick={this.props.changeToCreate}
-          >创建</Button>
+          onClick={this.props.handleCreate}
+          value={this.state.editingItemText}
+          // disabled={this.state.isDisabled}
+          >创建</button>
+          {/* 这个地方不要用Antd的Button组件！！因为涉及到获取input值会需要及时的更新，而Antd的Button组件可能因为复杂的动画效果产生的延迟会影响value值的传递！ */}
         </div>
       );
     }
@@ -73,6 +98,16 @@ import {
   class TagEdit extends Component {
     constructor(props) {
       super(props);
+      
+      this.state={
+        editingItemText:this.props.itemText,
+        origin:this.props.itemText
+      };
+    }
+
+    changeItem = e =>{
+      this.setState({editingItemText: e.target.value});
+      console.log(this.state.editingItemText);
     }
   
     render() {
@@ -80,18 +115,29 @@ import {
         <div>
           <a onClick={this.props.changeToTable} className="icon">&lt;</a>
           <Input type="text" placeholder="标签名称"
-            value={this.props.filterText}//放入需要编辑的标签的原始值
+            value={this.state.editingItemText}//放入需要编辑的标签的原始值
+            onChange={this.changeItem}
           />
           <ColorSelect
           >
           </ColorSelect>
-          <Button danger style={{width:"45%",marginBottom:"15px"}}>
+          <button className="btn btn-danger" 
+          id="delete"
+          style={{width:"45%",marginBottom:"15px"}}
+          onClick={this.props.handleEdit}
+          origin={this.state.origin}
+          value={this.state.editingItemText}
+          >
             删除
-          </Button>
-          <Button type="primary"
-           style={{width:"45%",float:"right"}}
-          // onClick={this.props.changeToCreate}
-          >完成</Button>
+          </button>
+          <button type="primary"
+          id="change"
+          className="btn"
+          style={{width:"45%",float:"right"}}
+          onClick={this.props.handleEdit}
+          origin={this.state.origin}
+          value={this.state.editingItemText}
+          >完成</button>
         </div>
       );
     }
@@ -170,14 +216,17 @@ import {
             <span className="dot">• &nbsp;</span>
             {item.thing}
           <div className="edit" style={{ marginLeft: "auto",zIndex:"10" }}
+          id={item.thing}
           onClick={this.props.changeToEdit}
           >编辑</div> {/*点击“编辑”时，要用到阻止冒泡（stopPropagation()），以防触发changeDone事件。*/}
-          <div style={{ visibility: item.done ? "visible" : "hidden", marginRight: "10px",fontWeight: "800" }}>√</div>
+          <div onClick={this.props.changeDone}
+          id={item.thing}
+          style={{ visibility: item.done ? "visible" : "hidden", marginRight: "10px",fontWeight: "800" }}>√</div>
         </li>
       );
 
       });
-      if (listItems.length<=0){// 二选一！！！！！！！！！！
+      if (listItems.length<=0){
         console.log("没有")
         listItems.push(
           <li className="tag-tb" key style={{color:"#a9a9a9"}}> 没有结果 </li>
@@ -196,37 +245,15 @@ class DropDown extends Component {
       super(props);
       this.state = {
         filterText: '',
-        visible: false,
-        view:1
+        visible: false
       };
     }
   
-    // hide = () => {
-    //   this.setState({
-    //     visible: false,
-    //   });
-    // };
-
-    changeToTable= e => {
+    hide = () => {
       this.setState({
-        view: 1,
+        visible: false,
       });
-    }
-
-    changeToEdit = e => {
-      e.stopPropagation();//点击编辑，阻止事件冒泡！！！！！！！！
-      console.log("666");
-      this.setState({
-        view: 3,
-      });
-    }
-
-    changeToCreate = e => {
-      console.log("222");
-      this.setState({
-        view: 2,
-      });
-    }
+    };
   
     handleVisibleChange = visible => {
       this.setState({ visible });
@@ -240,21 +267,15 @@ class DropDown extends Component {
     }
     
     render() {
-      return (
-        <div>
+      if(this.props.view==1){
+        return (
           <Popover
             content={
               <div style={{ width: "250px" }}>
-                {/* <a onClick={this.hide} className="icon" style={{float:"right",marginRight:"7px",marginLeft:"30px"}}>×</a> */}
-              
-                  {/* 在这里用if else 切换三种视图！！！！！！！！！！！！！！！！！！！！！！！！ */}
-
-                  <div style={{display:this.state.view==1?"block":"none"}}>
                     <TagSearch
                     filterText={this.state.filterText}
                     handleFilterTextChange={this.handleFilterTextChange}
-                    changeToCreate={this.changeToCreate}
-                                                //标签状态框!!!!!!!!!!!!!!!!!!!!!!!
+                    changeToCreate={this.props.changeToCreate}
                     >
                     </TagSearch>
   
@@ -264,39 +285,64 @@ class DropDown extends Component {
                       /////////////////////////////////////////////////////////////////
                       changeDone={this.props.changeDone}//这里是问题所在！！！，爷爷组件的方法传不进去！！！！！！！！！！！！
                       /////////////////////////////////////////////////////////////////
-                      changeToEdit={this.changeToEdit}
+                      changeToEdit={this.props.changeToEdit}
                     >
                     </TagTable>
-                  </div>
-  
-                  <div style={{display:this.state.view==2?"block":"none"}}>
-                                                {/* //标签新增框!!!!!!!!!!!!!!!!!!!!!!! */}
-                    <TagCreate
-                    changeToTable={this.changeToTable}
-                    >
-  
-                    </TagCreate>
-                  </div>
-  
-                  <div style={{display:this.state.view==3?"block":"none"}}>
-                                                {/* //标签修改框!!!!!!!!!!!!!!!!!!!!!!! */}
-                    <TagEdit
-                    changeToTable={this.changeToTable}
-                    >
-  
-                    </TagEdit>
-                  </div>
               </div>
             }
-            title="标签编辑器"
+            title="所有标签"
             trigger="click"
             visible={this.state.visible}
             onVisibleChange={this.handleVisibleChange}
           >
             <Button type="link">添加标签</Button>
           </Popover>
-        </div>
       );
+      }else if(this.props.view==2){
+        return (
+          <Popover
+            content={
+              <div style={{ width: "250px" }}>
+                <a onClick={this.hide} className="icon" style={{float:"right",marginRight:"7px",marginLeft:"30px"}}>×</a>
+                    <TagCreate
+                    changeToTable={this.props.changeToTable}
+                    handleCreate={this.props.handleCreate}
+                    >
+                    </TagCreate>
+              </div>
+            }
+            title="新增标签"
+            trigger="click"
+            visible={this.state.visible}
+            onVisibleChange={this.handleVisibleChange}
+          >
+            <Button type="link">添加标签</Button>
+          </Popover>
+      );
+      }else if(this.props.view==3){
+        return (
+          <Popover
+            content={
+              <div style={{ width: "250px" }}>
+                <a onClick={this.hide} className="icon" style={{float:"right",marginRight:"7px",marginLeft:"30px"}}>×</a>
+                    <TagEdit
+                    changeToTable={this.props.changeToTable}
+                    handleEdit={this.props.handleEdit}
+                    itemText={this.props.itemText}
+                    >
+                    </TagEdit>
+              </div>
+            }
+            title="修改标签"
+            trigger="click"
+            visible={this.state.visible}
+            onVisibleChange={this.handleVisibleChange}
+          >
+            <Button type="link">添加标签</Button>
+          </Popover>
+      );
+      }
+
     }
   }
 

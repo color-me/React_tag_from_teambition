@@ -143,6 +143,29 @@ li {
   margin-bottom: 15px;
   font-size: 25px;
 }
+.btn {
+  cursor: pointer;
+  margin-top: 10px;
+  border: none;
+  border-radius: 4px;
+  color: white;
+  line-height: 30px;
+  background-color: #1890ff;
+  transition: background-color 0.3s ease, border 0.3s ease, color 0.3s ease;
+}
+.btn:hover {
+  background-color: #1470c7;
+}
+.btn-danger {
+  border: 1px solid ;
+  color: #ec0000;
+  background-color: #ffffff;
+}
+.btn-danger:hover {
+  border: 1px solid #ec0000;
+  background-color: #ec0000;
+  color: white;
+}
 .dot {
   font-size: 22px;
 }
