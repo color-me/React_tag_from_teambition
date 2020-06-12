@@ -13,7 +13,7 @@
   height: 28px;
   position: relative;
 }
-.tag {
+#tag {
   overflow: hidden;
   margin: 8px 0 0 8px;
   height: 28px;
@@ -25,17 +25,12 @@
   transition: padding-right 218ms ease;
   z-index: 2;
 }
-.tag:hover {
+#tag:hover {
   padding-right: 25px;
   z-index: 0;
 }
-.tag:hover .close {
+#tag:hover .close {
   opacity: 1;
-}
-.tag-red {
-  color: #c21c07;
-  background-color: #ffeded;
-  z-index: 0;
 }
 .close {
   top: 9px;
@@ -75,6 +70,7 @@ li {
 }
 .tag-tb {
   display: flex;
+  padding-left: 50px;
   text-indent: 10px;
   padding: 0 !important;
   line-height: 40px;
@@ -125,6 +121,30 @@ li {
 }
 .color6 {
   background-color: #8200ce;
+}
+.tagColor1 {
+  color: #167cc0;
+  background-color: #daeeff;
+}
+.tagColor2 {
+  color: #04a019;
+  background-color: #c7ffda;
+}
+.tagColor3 {
+  color: #e76800;
+  background-color: #ffebd1;
+}
+.tagColor4 {
+  color: #ee1b1b;
+  background-color: #ffd4d4;
+}
+.tagColor5 {
+  color: #ff008c;
+  background-color: #ffdcf7;
+}
+.tagColor6 {
+  color: #8200ce;
+  background-color: #eed2ff;
 }
 .gougou {
   display: block;
