@@ -1,10 +1,10 @@
-仿teambition标签demo
+## 仿teambition标签demo
 
 基于React + Antd，实现标签的状态改变，标签新增、颜色选择、搜索、修改、删除，数据本地存储等
 
-动图演示 [链接](https://996.icu).
+GIF动图  [演示链接](http://39.96.44.171:8001/static/assets/img/tag.gif).
 
-codesandbox[在线预览链接](https://codesandbox.io/s/withered-sky-h3g8j?file=/src/App.js).
+codesandbox  [预览链接](https://codesandbox.io/s/withered-sky-h3g8j?file=/src/App.js).
 
 已配置ESLint，Less
 
